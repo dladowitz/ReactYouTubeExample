@@ -17,17 +17,26 @@ class App extends Component {
   constructor(props){
     super(props);
 
-    this.state = { videos: [
+    this.state = {
+      videos: [
         {id: {videoId: 1}, etag: 1, snippet: {title: "Die Hard", description: "Bruce Willis Kills Terrorists", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
-        {id: {videoId: 1}, etag: 2, snippet: {title: "Die Hard 2", description: "Bruce Willis Kills Terrorists", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
-        {id: {videoId: 1}, etag: 3, snippet: {title: "Die Hard 3", description: "Bruce Willis Kills Terrorists", thumbnails: { default: {url: "./images/zebra.jpg"} }}}
-      ] };
+        {id: {videoId: 1}, etag: 2, snippet: {title: "Die Hard 2", description: "Bruce Willis Kills Some More Terrorists With A Nail Gun", thumbnails: { default: {url: "./images/mountain_lion.jpg"} }}},
+        {id: {videoId: 1}, etag: 3, snippet: {title: "Die Hard 3", description: "Someone Dies I'm pretty Sure", thumbnails: { default: {url: "./images/bridge.jpg"} }}}
+      ],
+      selectedVideo: null
+    };
+
+    this.state.selectedVideo = this.state.videos[0]
+
     console.log(this.state)
 
     YTSearch({key: API_Key, term: 'surfboards'}, (videos) => {d
       if(vidoes){
-        console.log("Found Vidoes")
-        this.setState({ videos });
+        console.log("Found Videos")
+        this.setState({
+          videos: videos,
+          selectedVideo: vidoes[0]
+        });
 
       }else{
         console.log("Can't find videos")
@@ -40,8 +49,12 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
-        <VideoDetail video={this.state.videos[0]} />
-        <VideoList videos={this.state.videos} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList
+          onVideoSelect={ selectedVideo => {this.setState({selectedVideo})
+                                            console.log("Someone clicked me!")} }
+          videos={this.state.videos}
+        />
       </div>
     );
   }
