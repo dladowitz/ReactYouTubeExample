@@ -19,40 +19,77 @@ class App extends Component {
 
     this.state = {
       videos: [
-        {id: {videoId: 1}, etag: 1, snippet: {title: "Die Hard", description: "Bruce Willis Kills Terrorists", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
-        {id: {videoId: 1}, etag: 2, snippet: {title: "Die Hard 2", description: "Bruce Willis Kills Some More Terrorists With A Nail Gun", thumbnails: { default: {url: "./images/mountain_lion.jpg"} }}},
-        {id: {videoId: 1}, etag: 3, snippet: {title: "Die Hard 3", description: "Someone Dies I'm pretty Sure", thumbnails: { default: {url: "./images/bridge.jpg"} }}}
-      ],
-      selectedVideo: null
+          {id: {videoId: 1}, etag: 1, snippet: {title: "Zebra Mix", description: "Have Zebra Have Horse", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
+          {id: {videoId: 1}, etag: 2, snippet: {title: "Wild Mountain Lions", description: "Dusty's Cousin", thumbnails: { default: {url: "./images/mountain_lion.jpg"} }}},
+          {id: {videoId: 1}, etag: 3, snippet: {title: "Ye Ole Bridge", description: "Old School Bridge", thumbnails: { default: {url: "./images/bridge.jpg"} }}}
+        ],
+      selectedVideo: {id: {videoId: 1}, etag: 1, snippet: {title: "Zebra Mix", description: "Have Zebra Have Horse", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
     };
 
-    this.state.selectedVideo = this.state.videos[0]
-
+    console.log("Current state: ")
     console.log(this.state)
 
-    YTSearch({key: API_Key, term: 'surfboards'}, (videos) => {d
-      if(vidoes){
-        console.log("Found Videos")
-        this.setState({
-          videos: videos,
-          selectedVideo: vidoes[0]
-        });
+    // YTSearch({key: API_Key, term: 'surfboards'}, (videos) => {d
+    //   if(vidoes){
+    //     console.log("Found Videos")
+    //     this.setState({
+    //       videos: videos,
+    //       selectedVideo: vidoes[0]
+    //     });
+    //
+    //   }else{
+    //     console.log("Can't find videos")
+    //     this.setState({ videos: ["Die Hard", "Die Hard 2", "Die Hard 3"]})
+    //   }
+    // });
+  }
 
-      }else{
-        console.log("Can't find videos")
-        this.setState({ videos: ["Die Hard", "Die Hard 2", "Die Hard 3"]})
-      }
-    });
+  videoSearch(term){
+    console.log("You searched for: " + term)
+    var videos = []
+    var matched = false
+
+    if(term === 'ranch'){
+      console.log("Matched 'ranch'");
+      videos = [
+        {id: {videoId: 1}, etag: 1, snippet: {title: "Zebra Mix", description: "Have Zebra Have Horse", thumbnails: { default: {url: "./images/zebra.jpg"} }}},
+        {id: {videoId: 1}, etag: 2, snippet: {title: "Wild Mountain Lions", description: "Dusty's Cousin", thumbnails: { default: {url: "./images/mountain_lion.jpg"} }}},
+        {id: {videoId: 1}, etag: 3, snippet: {title: "Ye Ole Bridge", description: "Old School Bridge", thumbnails: { default: {url: "./images/bridge.jpg"} }}}
+      ]
+      matched = true
+    } else if(term === 'climbing') {
+      console.log("Matched 'climbing'")
+      videos = [
+        {id: {videoId: 1}, etag: 1, snippet: {title: "Success", description: "We Did It", thumbnails: { default: {url: "./images/success.jpg"} }}},
+        {id: {videoId: 1}, etag: 2, snippet: {title: "Top", description: "At the top of the mountain", thumbnails: { default: {url: "./images/top.jpg"} }}},
+        {id: {videoId: 1}, etag: 3, snippet: {title: "Giant", description: "Looks like a giant", thumbnails: { default: {url: "./images/giant.jpg"} }}}
+      ]
+      matched = true
+    }
+
+    if(matched){
+      this.setState({
+        videos: videos,
+        selectedVideo: videos[0]
+      })
+    }
+
+    console.log("Current state: ")
+    console.log(this.state)
   }
 
   render() {
+    console.log("I' rendering the index page!")
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearchTermChange={term => this.videoSearch(term)}/>
         <VideoDetail video={this.state.selectedVideo} />
         <VideoList
-          onVideoSelect={ selectedVideo => {this.setState({selectedVideo})
-                                            console.log("Someone clicked me!")} }
+          onVideoSelect={ selectedVideo => {
+                                            this.setState({selectedVideo})
+                                            console.log("Someone clicked me!")
+                                          }
+                        }
           videos={this.state.videos}
         />
       </div>

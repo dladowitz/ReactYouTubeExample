@@ -2,6 +2,7 @@ import React from 'react'
 import VideoListItem from './video_list_item'
 
 const VideoList = (props) => {
+  console.log("I'm rendering the Video List")
 
   const VideoItems = props.videos.map((video) => {
     return (
@@ -15,7 +16,7 @@ const VideoList = (props) => {
 
   return (
     <ul className="col-md-4 list-group">
-      Found {props.videos.length} videos.
+      Results: {props.videos.length} videos
       {VideoItems}
     </ul>
   );
